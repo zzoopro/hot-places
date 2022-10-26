@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import Layout from "../components/common/Layout";
 
 const BASE_URL = "http://localhost:9000";
 
@@ -15,6 +16,7 @@ const Home = () => {
 
   const fetchData = () => {
     axios(`${BASE_URL}/api/posts/all`).then((response: any) => {
+      console.log(response);
       dispatch({ type: "renewal", payload: response.data });
     });
   };
@@ -32,22 +34,24 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <ul>
-        {reduxState?.posts?.map((post: any, idx: number) => {
-          return (
-            <li key={idx}>
-              <h2>{post?.title}</h2>
-              <p>{post?.content}</p>
-            </li>
-          );
-        })}
-      </ul>
+    <Layout>
+      <div>
+        <ul>
+          {reduxState?.posts?.map((post: any, idx: number) => {
+            return (
+              <li key={idx}>
+                <h2>{post?.title}</h2>
+                <p>{post?.content}</p>
+              </li>
+            );
+          })}
+        </ul>
 
-      <button onClick={addPost} className="bg-red-500">
-        add
-      </button>
-    </div>
+        <button onClick={addPost} className="bg-red-500">
+          add
+        </button>
+      </div>
+    </Layout>
   );
 };
 
