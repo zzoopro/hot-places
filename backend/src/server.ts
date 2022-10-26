@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import mongoose from "mongoose";
 
 import postsRouter from "./routers/postsRouter";
 
@@ -18,6 +19,15 @@ server.get("/", (req: Request, res: Response) => {
 
 server.use("/api/posts", postsRouter);
 
-server.listen(PORT, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-});
+console.log("db_url", process.env.DB_URL);
+
+mongoose
+  .connect(process.env.DB_URL)
+  .then(() => startServer())
+  .catch((error) => console.log("DB Not Connected.", `ERROR: ${error}`));
+
+function startServer() {
+  server.listen(PORT, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+  });
+}
