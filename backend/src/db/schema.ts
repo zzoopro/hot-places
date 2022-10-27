@@ -20,6 +20,7 @@ interface PlaceInterface {
   photo?: string;
   createdAt: Date;
   liked: UserInterface[];
+  viewCount: number;
 }
 interface CommentInterface {
   commenter: UserInterface;
@@ -50,6 +51,7 @@ export const placeSchema = new Schema<PlaceInterface>({
   photo: String,
   createdAt: { type: Date, default: Date.now },
   liked: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  viewCount: Number,
 });
 
 export const commentSchema = new Schema<CommentInterface>({

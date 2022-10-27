@@ -15,7 +15,7 @@ const Home = () => {
   }, []);
 
   const fetchData = () => {
-    axios(`${BASE_URL}/api/posts/all`).then((response: any) => {
+    axios(`${BASE_URL}/api/places/all`).then((response: any) => {
       console.log(response);
       dispatch({ type: "renewal", payload: response.data });
     });

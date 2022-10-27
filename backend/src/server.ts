@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
-import postsRouter from "./routers/postsRouter";
+import placesRouter from "./routers/placesRouter";
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ server.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
-server.use("/api/posts", postsRouter);
+server.use("/api/places", placesRouter);
 
 console.log("db_url", process.env.DB_URL);
 
