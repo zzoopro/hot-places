@@ -4,7 +4,7 @@ export const GetCurrentCoords: any = () => {
   const [coords, setCoords] = useState<number[]>([0, 0]);
 
   useEffect(() => {
-    const successCallback = ({ coords, timestamp }: any) => {
+    const successCallback = ({ coords, timestamp }: any) => {      
       setCoords([coords.latitude, coords.longitude]);
     };
     const errorCallback = (error: any) => {

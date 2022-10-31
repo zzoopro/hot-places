@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Layout from "../components/common/Layout";
 
-const BASE_URL = "http://localhost:9000";
+import { BASE_BACKEND_URL } from "../utils/constants"
 
 const Home = () => {
   const reduxState = useSelector((state) => state) as any;
@@ -15,8 +15,7 @@ const Home = () => {
   }, []);
 
   const fetchData = () => {
-    axios(`${BASE_URL}/api/places/all`).then((response: any) => {
-      console.log(response);
+    axios(`${BASE_BACKEND_URL}/api/places/all`).then((response: any) => {
       dispatch({ type: "renewal", payload: response.data });
     });
   };
