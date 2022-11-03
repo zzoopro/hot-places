@@ -45,8 +45,8 @@ export const placeSchema = new Schema<PlaceInterface>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   coords: {
-    lng: { type: Number, required: true },
     lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
   },
   photo: String,
   createdAt: { type: Date, default: Date.now },
