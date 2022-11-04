@@ -55,3 +55,29 @@ export interface CoordsType {
    lat: number,
    lng: number
 }
+
+export interface PopupInterface {
+   isShow: boolean,
+   payload: {
+      type: string,
+      element: () => JSX.Element | null,
+      resultFn: () => void,
+
+   }
+}
+export const INIT_POPUP = {
+   isShow: false,
+   payload: {
+      type: "init",
+      element: () => null,
+      resultFn: () => {},
+   }
+}
+
+export const INIT_LOADING = {
+   isLoading: false
+}
+
+export interface LoadingInterface {
+   isLoading: boolean
+}

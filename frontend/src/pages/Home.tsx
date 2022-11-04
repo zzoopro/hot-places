@@ -1,42 +1,29 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../components/common/Layout";
+import { setLoading } from "../redux/actions/loadingAction";
+import { getPlaces } from "../utils/api";
+import { INITPLACE, PlaceInterface } from "../utils/types";
 
-import { BASE_BACKEND_URL } from "../utils/constants"
+const Home = () => {  
+  const dispatch = useDispatch()
+  const loadingState = useSelector((state: any) => state.loading)
 
-const Home = () => {
-  const reduxState = useSelector((state) => state) as any;
-  const dispatch = useDispatch();
-  console.log("redux data", reduxState);
+  const [places, setPlaces] = useState<PlaceInterface[]>([])
 
   useEffect(() => {
-    fetchData();
+    getPlaces().then((response: any) => setPlaces(response.data))
   }, []);
 
-  const fetchData = () => {
-    axios(`${BASE_BACKEND_URL}/api/places/all`).then((response: any) => {
-      dispatch({ type: "renewal", payload: response.data });
-    });
-  };
-
-  const dummy = {
-    content: "content",
-    postId: 22,
-    creatorId: 11,
-    createdAt: 123,
-    title: "title",
-  };
-
   const addPost = () => {
-    dispatch({ type: "add", payload: dummy });
+    setPlaces((prev: PlaceInterface[]) =>  [...prev, INITPLACE])
   };
 
   return (
     <Layout>
       <div>
         <ul>
-          {reduxState?.posts?.map((post: any, idx: number) => {
+          {places?.map((post: any, idx: number) => {
             return (
               <li key={idx}>
                 <h2>{post?.title}</h2>
