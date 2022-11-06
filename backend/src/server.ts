@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
+import bp from "body-parser";
+
 import placesRouter from "./routers/placesRouter";
 
 dotenv.config();
@@ -11,6 +13,8 @@ const server: Express = express();
 const PORT = process.env.PORT;
 
 server.use(cors());
+server.use(bp.json());
+server.use(bp.urlencoded({ extended: true }));
 
 server.get("/", (req: Request, res: Response) => {
   console.log("called");

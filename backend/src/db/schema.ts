@@ -10,17 +10,14 @@ interface UserInterface {
   likedPlaces: PlaceInterface[];
 }
 interface PlaceInterface {
-  creator: UserInterface;
+  creator?: UserInterface | number;
   title: string;
   description: string;
-  coords: {
-    lng: number;
-    lat: number;
-  };
+  address: string;
   photo?: string;
   createdAt: Date;
-  liked: UserInterface[];
-  viewCount: number;
+  liked?: number;
+  viewCount?: number;
 }
 interface CommentInterface {
   commenter: UserInterface;
@@ -41,17 +38,14 @@ export const userSchema = new Schema<UserInterface>({
 });
 
 export const placeSchema = new Schema<PlaceInterface>({
-  creator: { type: Schema.Types.ObjectId, ref: "User" },
+  // creator: { type: Schema.Types.ObjectId || Number, ref: "User", default: 0 },
   title: { type: String, required: true },
   description: { type: String, required: true },
-  coords: {
-    lat: { type: Number, required: true },
-    lng: { type: Number, required: true },
-  },
+  address: { type: String, required: true },
   photo: String,
   createdAt: { type: Date, default: Date.now },
-  liked: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  viewCount: Number,
+  liked: { type: Number, default: 0 },
+  viewCount: { type: Number, default: 0 },
 });
 
 export const commentSchema = new Schema<CommentInterface>({

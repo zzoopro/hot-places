@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
+import Popup from "./components/common/Popup";
 import PrivateRoutes from "./components/common/PrivateRoutes";
 import AddPlace from "./pages/AddPlace";
 import Auth from "./pages/Auth";
@@ -10,6 +11,7 @@ import UserProfile from "./pages/UserProfile";
 const Router = () => {
   return (
     <BrowserRouter>
+      <Popup />
       <Loading />
       <Routes>
         <Route element={<PrivateRoutes />}>

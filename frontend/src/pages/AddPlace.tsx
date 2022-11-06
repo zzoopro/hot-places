@@ -1,59 +1,122 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import Layout from "../components/common/Layout";
 import Map from "../components/common/map";
-import { getAddress } from "../utils/api";
+import { getAddress, postPlace } from "../utils/api";
 import { GetCurrentCoords, SetMap } from "../utils/maps";
 import { PlaceInterface, CoordsType, INITPLACE } from "../utils/types";
 import AddressList from "../components/addPlace/addressList";
+import { useDispatch, useSelector } from "react-redux";
+import { hidePopup, showPopup } from "../redux/actions/popupAction";
+import { useNavigate } from "react-router-dom";
 
 const AddPlace = () => {
-  const [currentlat, currentlng] = GetCurrentCoords(); // current coords  
+  const [currentlat, currentlng] = GetCurrentCoords(); // current coords
   const [placeList, setPlaceList] = useState<PlaceInterface[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<PlaceInterface>(INITPLACE);
+  const [addressOffset, setAddressOffset] = useState<number>(1); // address offset
+  const [addressInput, setAddressInput] = useState<string>(""); // address Input
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
-  const [address, setAddress] = useState<string>(""); 
-  const [title, setTitle] = useState<string>("")
-  const [description, setDescription] = useState<string>("")
+  const listRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    console.log(placeList);
-  }, [placeList]);
+  const dispatch = useDispatch();
+  const reduxState = useSelector((reduxState: any) => reduxState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     SetMap(currentlat, currentlng);
   }, [currentlat, currentlng]);
 
+  useEffect(() => {
+    listRef.current?.addEventListener("scroll", onListScroll);
+    return () => listRef.current?.removeEventListener("scroll", onListScroll);
+  }, [listRef, addressInput]);
+
   const onAddressChange = (event: any) => {
-    setAddress(event.target.value);
+    setAddressInput(event.target.value);
   };
-  const onSubmit = async (event: React.FormEvent) => {
+
+  const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    await getAddress(address).then((response) =>
-      setPlaceList(response.data.results.juso)
-    );
+    getAddressFn("init");
+    listRef?.current?.scroll(0, 0);
+  };
+
+  const getAddressFn = async (type?: string) => {
+    await getAddress(addressInput, addressOffset).then((response) => {
+      if (response.data.results.juso) {
+        if (type === "init") {
+          setPlaceList((prev) => [...response.data.results.juso]);
+          // listRef.current?.scrollTo(0);
+        } else {
+          setPlaceList((prev) => [...prev, ...response.data.results.juso]);
+        }
+      }
+    });
   };
 
   const onTitleChange = (event: any) => {
-    setTitle(event.target.value) 
-  }
+    setTitle(event.target.value);
+  };
   const onDescriptionChange = (event: any) => {
-    setDescription(event.target.value)
-  }
+    setDescription(event.target.value);
+  };
 
-  const upload = () => {
+  const BasicPopup = () => {
+    return (
+      <div className="w-[300px] h-[200px] bg-white z-50">
+        <span className="">안녕하세요</span>
+        <button
+          onClick={() => {
+            dispatch(hidePopup());
+          }}
+        >
+          확인
+        </button>
+      </div>
+    );
+  };
+
+  const uploadClick = async () => {
     const placeData = {
       title,
       description,
-      location: {
-        lat: 0,
-        lng: 0,
-        address: selectedPlace.roadAddr,
-        zipCode: selectedPlace.zipNo
-      }
-    }
+      address: addressInput,
+    };
 
-    console.log(placeData)
-  }
+    postData(placeData);
+
+    dispatch(
+      showPopup({
+        element: BasicPopup,
+        resultFn: () => {
+          dispatch(hidePopup());
+        },
+      })
+    );
+  };
+
+  const postData = async (data: any) => {
+    await postPlace(data).then((response: any) => {
+      if (response.data.ok) {
+        console.log("ok");
+        navigate("/");
+      } else {
+        console.log("failed");
+      }
+    });
+  };
+
+  const onListScroll = () => {
+    const scrollTop = listRef.current?.scrollTop;
+    const uiHeight = listRef.current?.offsetHeight;
+    const scrollHeight = listRef.current?.scrollHeight;
+    if (scrollTop! + uiHeight! === scrollHeight) {
+      setAddressOffset((prev) => prev + 1);
+      getAddressFn();
+    }
+  };
 
   return (
     <Layout>
@@ -66,24 +129,37 @@ const AddPlace = () => {
           placeholder="주소를 입력하세요"
           className="border w-full mt-4"
           onChange={onAddressChange}
-          value={address}
+          value={addressInput}
         />
         <button className="bg-black text-white ml-4 w-max">검색</button>
       </form>
-      <Suspense fallback={"loading"}>
-        <AddressList
-          placeList={placeList}
-          setSelectedPlace={setSelectedPlace}
-          selectedPlace={selectedPlace}
-        ></AddressList>
-      </Suspense>
+
+      <AddressList
+        reference={listRef}
+        placeList={placeList}
+        setSelectedPlace={setSelectedPlace}
+        selectedPlace={selectedPlace}
+      ></AddressList>
+
       <form className="flex flex-col mt-4">
-        <input type="text" placeholder="제목" onChange={onTitleChange} value={title}/>
+        <input
+          type="text"
+          placeholder="제목"
+          onChange={onTitleChange}
+          value={title}
+        />
         <label htmlFor="place_desc">설명</label>
-        <textarea id="place_desc" className="block border h-36" onChange={onDescriptionChange} value={description}></textarea>
+        <textarea
+          id="place_desc"
+          className="block border h-36"
+          onChange={onDescriptionChange}
+          value={description}
+        ></textarea>
       </form>
 
-      <button className="w-full bg-black text-white" onClick={upload}>업로드</button>
+      <button className="w-full bg-black text-white" onClick={uploadClick}>
+        업로드
+      </button>
     </Layout>
   );
 };

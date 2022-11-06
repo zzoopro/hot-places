@@ -1,10 +1,25 @@
 import { Express, Request, Response } from "express";
+import { Place } from "../db/schema";
 import { posts } from "../data";
 
-export const allPlaces = (req: Request, res: Response) => {
-  res.json(posts);
+export const allPlaces = async (req: Request, res: Response) => {
+  const places = await Place.find();
+
+  console.log("allPlace", places);
+
+  res.json(places);
 };
 
-export const addPlaces = (req: Request, res: Response) => {
-  res.json("hi");
+export const addPlaces = async (req: Request, res: Response) => {
+  if (req.body) {
+    const { title, description, address } = req.body;
+    const newPlace = new Place({ title, description, address });
+
+    if (newPlace) {
+      await newPlace.save();
+      return res.json({ ok: true });
+    } else {
+      console.log("cant created");
+    }
+  }
 };
