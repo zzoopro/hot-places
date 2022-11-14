@@ -4,10 +4,7 @@ import { posts } from "../data";
 
 export const allPlaces = async (req: Request, res: Response) => {
   const places = await Place.find();
-
-  console.log("allPlace", places);
-
-  res.json(places);
+  return res.json(places);
 };
 
 export const addPlaces = async (req: Request, res: Response) => {

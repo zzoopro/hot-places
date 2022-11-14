@@ -5,6 +5,7 @@ interface UserInterface {
   email: string;
   phone?: number;
   avater?: string;
+  password: string;
   createdAt: Date;
   places: PlaceInterface[];
   likedPlaces: PlaceInterface[];
@@ -28,9 +29,10 @@ interface CommentInterface {
 }
 
 export const userSchema = new Schema<UserInterface>({
-  username: { type: String, default: "Anon" }, // String is shorthand for {type: String}
-  email: { type: String, required: true },
-  phone: Number,
+  username: { type: String, required: true, unique: true }, // String is shorthand for {type: String}
+  email: { type: String, required: true, unique: true },
+  phone: { type: Number, required: true, unique: true },
+  password: { type: String, required: true },
   avater: String,
   createdAt: { type: Date, default: Date.now },
   places: [{ type: Schema.Types.ObjectId, ref: "Place" }],

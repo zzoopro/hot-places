@@ -22,3 +22,18 @@ export const postPlace = async (data: any) => {
     data,
   }).then((response) => response);
 };
+
+export const postSignUp = async (form: any) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_BACKEND_URL}/api/users/signup`,
+    data: form,
+  });
+};
+export const postLogin = async (form: any) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_BACKEND_URL}/api/users/login`,
+    data: form,
+  });
+};
