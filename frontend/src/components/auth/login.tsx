@@ -18,7 +18,7 @@ const Login = () => {
       email,
       password,
     };
-    postLogin(form);
+    postLogin(form).then((result) => console.log(result));
   };
   return (
     <form onSubmit={onSubmit}>
