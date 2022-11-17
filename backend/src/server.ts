@@ -4,9 +4,15 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bp from "body-parser";
 import session from "express-session";
+import fs from "fs"
+import https from "https"
 
 import placesRouter from "./routers/placesRouter";
 import usersRouter from "./routers/usersRouter";
+
+
+const key = fs.readFileSync("localhost-key.pem", "utf-8");
+const cert = fs.readFileSync("localhost.pem", "utf-8");
 
 dotenv.config();
 
@@ -17,6 +23,7 @@ server.use(cors());
 server.use(bp.json());
 server.use(bp.urlencoded({ extended: true }));
 
+server.set('trust proxy', 1)
 server.use(
   session({
     secret: "hotplaces",
@@ -24,7 +31,6 @@ server.use(
     saveUninitialized: true,
     cookie: {
       secure: false,
-      maxAge: 10000000,
     },
   })
 );
@@ -41,3 +47,5 @@ function startServer() {
     console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
   });
 }
+
+

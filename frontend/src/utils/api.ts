@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const ADDRESS_API_KEY = process.env.REACT_APP_ADDRESS_API_KEY;
-const BASE_BACKEND_URL = "http://localhost:9000";
+const BASE_BACKEND_URL = `http://localhost:${process.env.REACT_APP_BACKEND_PORT}`
 
 export const getAddress = async (keyword: string, index: number = 1) => {
   return await axios(

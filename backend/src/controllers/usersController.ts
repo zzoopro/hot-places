@@ -44,7 +44,8 @@ export const login = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({ ok: false, message: "password incorrect" });
     }
-    console.log("logined");
+    console.log("logined")
+    res.cookie("good", "good")
     return res.json({ ok: true });
   }
 };
