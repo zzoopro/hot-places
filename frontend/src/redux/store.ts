@@ -13,7 +13,7 @@ const persistConfig = {
   key: "root",
   storage,
 };
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(rootReducer);
+export const store = createStore(persistedReducer);
 export const persistor = persistStore(store);
