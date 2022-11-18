@@ -16,11 +16,7 @@ const Home = () => {
   useEffect(() => {
     getPlaces().then((response: any) => setPlaces(response.data))
   }, []);
-
-  const addPost = () => {
-    setPlaces((prev: AddressInterface[]) =>  [...prev, INITADDRESS])
-  };
-
+  
   return (
     <Layout>
       <div>
@@ -37,10 +33,6 @@ const Home = () => {
             );
           })}
         </ul>
-
-        <button onClick={addPost} className="bg-red-500">
-          add
-        </button>
       </div>
     </Layout>
   );
