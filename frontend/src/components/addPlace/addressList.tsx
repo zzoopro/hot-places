@@ -1,35 +1,35 @@
 import { LegacyRef, useEffect, useRef, useState } from "react";
 import { getAddress } from "../../utils/api";
 import { ChangeCoords } from "../../utils/maps";
-import { PlaceInterface, CoordsType } from "../../utils/types";
+import { CoordsType, AddressInterface } from "../../utils/types";
 
 interface AddressListProps {
-  placeList: PlaceInterface[];
-  setSelectedPlace: React.Dispatch<React.SetStateAction<PlaceInterface>>;
-  selectedPlace: PlaceInterface;
+  addressList: AddressInterface[];
+  setSelectedAddress: React.Dispatch<React.SetStateAction<AddressInterface>>;
+  selectedAddress: AddressInterface;
   reference: LegacyRef<HTMLUListElement>;
 }
 const AddressList = ({
-  placeList,
-  setSelectedPlace,
-  selectedPlace,
+  addressList,
+  setSelectedAddress,
+  selectedAddress,
   reference,
 }: AddressListProps) => {
-  const onClick = (place: PlaceInterface) => {
+  const onClick = (place: AddressInterface) => {
     ChangeCoords(place.roadAddr);
-    setSelectedPlace(place);
+    setSelectedAddress(place);
   };
 
   return (
     <ul className="max-h-24 overflow-y-scroll" ref={reference}>
-      {placeList?.map((place, i) => {
+      {addressList?.map((address, i) => {
         return (
           <li
             key={i}
-            onClick={() => onClick(place)}
-            className={selectedPlace === place ? "bg-black text-white" : ""}
+            onClick={() => onClick(address)}
+            className={selectedAddress === address ? "bg-black text-white" : ""}
           >
-            {place.roadAddr}
+            {address.roadAddr}
           </li>
         );
       })}

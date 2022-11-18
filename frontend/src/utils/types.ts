@@ -1,6 +1,6 @@
 import React from "react";
 
-export interface PlaceInterface {
+export interface AddressInterface {
   admCd: string;
   bdKdcd: string;
   bdMgtSn: string;
@@ -26,32 +26,7 @@ export interface PlaceInterface {
   udrtYn: string;
   zipNo: string;
 }
-export const INITPLACE = {
-  admCd: "",
-  bdKdcd: "",
-  bdMgtSn: "",
-  bdNm: "",
-  buldMnnm: "",
-  buldSlno: "",
-  detBdNmList: "",
-  emdNm: "",
-  emdNo: "",
-  engAddr: "",
-  jibunAddr: "",
-  liNm: "",
-  lnbrMnnm: "",
-  lnbrSlno: "",
-  mtYn: "",
-  rn: "",
-  rnMgtSn: "",
-  roadAddr: "",
-  roadAddrPart1: "",
-  roadAddrPart2: "",
-  sggNm: "",
-  siNm: "",
-  udrtYn: "",
-  zipNo: "",
-};
+
 
 export interface CoordsType {
   lat: number;
@@ -64,17 +39,36 @@ export interface PopupInterface {
   resultFn: () => void;
   key?: string;
 }
-export const INIT_POPUP = {
-  key: "init",
-  isShow: false,
-  element: () => null,
-  resultFn: () => {},
-};
 
-export const INIT_LOADING = {
-  isLoading: false,
-};
 
 export interface LoadingInterface {
   isLoading: boolean;
+}
+
+export interface UserInterface {
+  username: string;
+  email: string;
+  phone?: number;
+  avater?: string;
+  password: string;
+  createdAt: Date;
+  places: PlaceInterface[];
+  likedPlaces: PlaceInterface[];
+}
+export interface PlaceInterface {
+  creator?: UserInterface | number;
+  title: string;
+  description: string;
+  address: string;
+  photo?: string;
+  createdAt: Date;
+  liked?: number;
+  viewCount?: number;
+}
+export interface CommentInterface {
+  commenter: UserInterface;
+  receiver: UserInterface;
+  place: PlaceInterface;
+  comment: string;
+  createdAt: Date;
 }

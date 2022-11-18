@@ -1,5 +1,5 @@
-import { HIDE_POPUP, SHOW_POPUP } from "../../utils/constants";
-import { INIT_POPUP, PopupInterface } from "../../utils/types";
+import { HIDE_POPUP, INIT_POPUP, SHOW_POPUP } from "../../utils/constants";
+import { PopupInterface } from "../../utils/types";
 
 const popupReducer = (state: PopupInterface = INIT_POPUP, action: any) => {
   switch (action.type) {

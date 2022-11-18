@@ -3,16 +3,17 @@ import Layout from "../components/common/Layout";
 import Map from "../components/common/map";
 import { getAddress, postPlace } from "../utils/api";
 import { GetCurrentCoords, SetMap } from "../utils/maps";
-import { PlaceInterface, CoordsType, INITPLACE } from "../utils/types";
+import { AddressInterface } from "../utils/types";
 import AddressList from "../components/addPlace/addressList";
 import { useDispatch, useSelector } from "react-redux";
 import { hidePopup, showPopup } from "../redux/actions/popupAction";
 import { useNavigate } from "react-router-dom";
+import { INITADDRESS } from "../utils/constants";
 
-const AddPlace = () => {
+const UploadPlace = () => {
   const [currentlat, currentlng] = GetCurrentCoords(); // current coords
-  const [placeList, setPlaceList] = useState<PlaceInterface[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<PlaceInterface>(INITPLACE);
+  const [addressList, setAddress] = useState<AddressInterface[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<AddressInterface>(INITADDRESS);
   const [addressOffset, setAddressOffset] = useState<number>(1); // address offset
   const [addressInput, setAddressInput] = useState<string>(""); // address Input
   const [title, setTitle] = useState<string>("");
@@ -47,10 +48,10 @@ const AddPlace = () => {
     await getAddress(addressInput, addressOffset).then((response) => {
       if (response.data.results.juso) {
         if (type === "init") {
-          setPlaceList((prev) => [...response.data.results.juso]);
+          setAddress((prev) => [...response.data.results.juso]);
           // listRef.current?.scrollTo(0);
         } else {
-          setPlaceList((prev) => [...prev, ...response.data.results.juso]);
+          setAddress((prev) => [...prev, ...response.data.results.juso]);
         }
       }
     });
@@ -136,9 +137,9 @@ const AddPlace = () => {
 
       <AddressList
         reference={listRef}
-        placeList={placeList}
-        setSelectedPlace={setSelectedPlace}
-        selectedPlace={selectedPlace}
+        addressList={addressList}
+        setSelectedAddress={setSelectedAddress}
+        selectedAddress={selectedAddress}
       ></AddressList>
 
       <form className="flex flex-col mt-4">
@@ -164,4 +165,4 @@ const AddPlace = () => {
   );
 };
 
-export default AddPlace;
+export default UploadPlace;

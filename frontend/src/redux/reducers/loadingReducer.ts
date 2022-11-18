@@ -1,5 +1,5 @@
-import { SET_LOADING, STOP_LOADING } from "../../utils/constants";
-import { INIT_LOADING, LoadingInterface } from "../../utils/types";
+import { INIT_LOADING, SET_LOADING, STOP_LOADING } from "../../utils/constants";
+import { LoadingInterface } from "../../utils/types";
 
 const loadingReducer = (state: LoadingInterface = INIT_LOADING, action: any) => {
   switch (action.type) {

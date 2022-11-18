@@ -15,7 +15,7 @@ const Nav = () => {
         피드
       </NavLink>
       <NavLink
-        to="/place/add"
+        to="/places/upload"
         className={({ isActive }) => (isActive ? "text-teal-400" : undefined)}
       >
         업로드
