@@ -9,7 +9,7 @@ export const signup = async (req: Request, res: Response) => {
     const exitUser = await User.find({
       $or: [{ email }, { phone }, { username }],
     });
-    if (isEmpty(exitUser)) {
+    if (!isEmpty(exitUser)) {
       console.log();
       return res.status(400).json({
         ok: false,
@@ -21,9 +21,9 @@ export const signup = async (req: Request, res: Response) => {
         .update(password)
         .digest("base64");
       const newUser = new User({ email, password: hashed, phone, username });
-      if (newUser) {
-        console.log(newUser);
+      if (newUser) {        
         await newUser.save();
+        console.log("sign up completed");
         return res.json({ ok: true });
       }
     }
@@ -44,8 +44,7 @@ export const login = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({ ok: false, message: "password incorrect" });
     }
-    console.log("logined")
-    res.cookie("good", "good")
+    console.log("logined")    
     return res.json({ ok: true });
   }
 };

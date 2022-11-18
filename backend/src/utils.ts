@@ -1,9 +1,9 @@
 export const isEmpty = (any: any) => {
-  if (!any) {
-    return false;
-  } else if (!any[0]) {
-    return false;
-  } else {
+  if (any !== 0 && !any) {
     return true;
+  } else if (any.length === 0) {    
+    return true
+  } else {
+    return false;
   }
 };
