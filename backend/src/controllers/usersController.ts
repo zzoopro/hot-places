@@ -21,7 +21,7 @@ export const signup = async (req: Request, res: Response) => {
         .update(password)
         .digest("base64");
       const newUser = new User({ email, password: hashed, phone, username });
-      if (newUser) {        
+      if (newUser) {
         await newUser.save();
         console.log("sign up completed");
         return res.json({ ok: true });
@@ -44,7 +44,7 @@ export const login = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({ ok: false, message: "password incorrect" });
     }
-    console.log("logined")    
+    console.log("logined");
     return res.json({ ok: true });
   }
 };

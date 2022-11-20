@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import bp from "body-parser";
+import { swaggerUi, specs } from "./swagger";
 
 import placesRouter from "./routers/placesRouter";
 import usersRouter from "./routers/usersRouter";
@@ -18,6 +19,8 @@ app.use(bp.urlencoded({ extended: true }));
 
 app.use("/api/places", placesRouter);
 app.use("/api/users", usersRouter);
+
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 
 mongoose
   .connect(process.env.DB_URL)
