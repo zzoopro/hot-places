@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import bp from "body-parser";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import { swaggerUi, specs } from "./swagger";
 
 import placesRouter from "./routers/placesRouter";
 import usersRouter from "./routers/usersRouter";
+import authCheck from "./middleware/authCheck";
+import errorCheck from "./middleware/errorCheck";
 
 dotenv.config();
 
@@ -15,14 +17,18 @@ const app: Express = express();
 const PORT = process.env.PORT;
 
 app.use(cors());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
+
+app.use(authCheck);
 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/users", usersRouter);
 
 app.use("/api/places", placesRouter);
+
+app.use(errorCheck);
 
 mongoose
   .connect(process.env.DB_URL)
