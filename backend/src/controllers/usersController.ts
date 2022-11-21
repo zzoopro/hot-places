@@ -41,6 +41,7 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  console.log(req.cookies)
   if (req.body) {
     const { email, password } = req.body;
     const user: any = await User.findOne({ email });
@@ -63,7 +64,9 @@ export const login = async (req: Request, res: Response) => {
     } catch (error) {
       res.status(500).json({ ok: false, message: "token create failed." });
     }
-    console.log("logined");
+    
+    res.cookie('hot-places-user', token, { httpOnly: true, sameSite: "none", secure: true });
+    console.log("logined")
     return res.json({ ok: true, token });
   }
 };

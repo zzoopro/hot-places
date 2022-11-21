@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import bp from "body-parser";
+import cookieParser from "cookie-parser"
 import { swaggerUi, specs } from "./swagger";
 
 import placesRouter from "./routers/placesRouter";
@@ -14,6 +15,7 @@ const app: Express = express();
 const PORT = process.env.PORT;
 
 app.use(cors());
+app.use(cookieParser())
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
