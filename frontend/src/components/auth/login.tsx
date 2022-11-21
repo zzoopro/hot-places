@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUserAction } from "../../redux/actions/userAction";
 import { postLogin } from "../../utils/api";
+import { setTokenInLocalStorage, setUser } from "../../utils/utils";
 import Input from "./input";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setpassword] = useState<string>("");
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const onEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -18,7 +24,11 @@ const Login = () => {
       email,
       password,
     };
-    postLogin(form).then((result) => console.log(result));
+    postLogin(form).then((result) => {
+      setTokenInLocalStorage(result.data.token)
+      dispatch(setUserAction(setUser(result.data.user)))
+      navigate("/")
+    });
   };
   return (
     <form onSubmit={onSubmit}>

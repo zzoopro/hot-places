@@ -1,9 +1,10 @@
 import { Express, Request, Response } from "express";
 import { User } from "../db/schema";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { isEmpty } from "../utils";
+import { isJSDocAuthorTag } from "typescript";
 
 export const signup = async (req: Request, res: Response) => {
   if (req.body) {
@@ -34,7 +35,7 @@ export const signup = async (req: Request, res: Response) => {
         }
         await newUser.save();
         console.log("sign up completed");
-        return res.json({ ok: true, token });
+        return res.json({ ok: true, token, user: newUser });
       }
     }
   }
@@ -66,7 +67,34 @@ export const login = async (req: Request, res: Response) => {
     }
     
     res.cookie('hot-places-user', token, { httpOnly: true, sameSite: "none", secure: true });
-    console.log("logined")
-    return res.json({ ok: true, token });
+    return res.json({ ok: true, token, user });
   }
 };
+
+export const tokenCheck = async (req: Request, res: Response) => {  
+  const auth = req.headers.authrization
+  if(auth && typeof auth === "string"){
+    const token = auth.split(" ")[1]
+    const decodedToken = jwt.verify(token, process.env.PRIVATE_KEY)
+    if(decodedToken){
+      console.log("decoded Token",decodedToken)
+      res.json({ isLogin: true })
+    }
+  } else {
+    res.json({ isLogin: false, message: "jwt token not found."})
+  }
+}
+
+export const myProfile = async (req: Request, res: Response) => {  
+  const auth = req.headers.authrization
+  if(auth && typeof auth === "string"){
+    const token = auth.split(" ")[1]
+    const { userId } = jwt.verify(token, process.env.PRIVATE_KEY) as JwtPayload
+    if(userId){
+      const user = await User.findOne({_id: userId})
+      res.json({user})
+    }
+  } else {
+    res.json({ isLogin: false, message: "jwt token not found."})
+  }
+}

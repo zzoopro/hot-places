@@ -12,7 +12,7 @@ const options = {
     basePath: "/",
     servers: [
       {
-        url: "http://localhost:4000", // 요청 URL
+        url: `http://localhost:${process.env.PORT}`, // 요청 URL
       },
     ],
   },

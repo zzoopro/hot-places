@@ -19,10 +19,10 @@ app.use(cookieParser())
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-app.use("/api/places", placesRouter);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/users", usersRouter);
 
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api/places", placesRouter);
 
 mongoose
   .connect(process.env.DB_URL)

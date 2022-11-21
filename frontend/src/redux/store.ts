@@ -3,10 +3,12 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import loadingReducer from "./reducers/loadingReducer";
 import popupReducer from "./reducers/pupupReducer";
+import userReducer from "./reducers/userReducer";
 
 export const rootReducer = combineReducers({
   popup: popupReducer,
-  loading: loadingReducer
+  loading: loadingReducer,
+  user: userReducer
 });
 
 const persistConfig = {
