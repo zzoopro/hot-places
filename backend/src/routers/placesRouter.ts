@@ -4,6 +4,7 @@ import {
   getAllPlaces,
   getPlace,
 } from "../controllers/postsController";
+import { errorHandler } from "../middleware/errorHandler";
 
 /**
  * @swagger

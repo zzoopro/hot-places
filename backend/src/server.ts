@@ -8,8 +8,8 @@ import { swaggerUi, specs } from "./swagger";
 
 import placesRouter from "./routers/placesRouter";
 import usersRouter from "./routers/usersRouter";
-import authCheck from "./middleware/authCheck";
-import errorCheck from "./middleware/errorCheck";
+import { authCheck } from "./middleware/authCheck";
+import { errorHandler } from "./middleware/errorHandler";
 
 dotenv.config();
 
@@ -21,14 +21,13 @@ app.use(cookieParser());
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-app.use(authCheck);
-
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/users", usersRouter);
 
+app.use(authCheck);
 app.use("/api/places", placesRouter);
 
-app.use(errorCheck);
+app.use(errorHandler);
 
 mongoose
   .connect(process.env.DB_URL)
