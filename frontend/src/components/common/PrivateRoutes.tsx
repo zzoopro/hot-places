@@ -1,13 +1,9 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Navigate, Outlet, Route } from "react-router-dom";
-import { resetUserAction, setUserAction } from "../../redux/actions/userAction";
-import { getTokenInLocalStorage } from "../../utils/utils";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoutes = () => {
-  const userState = useSelector((state: any) => state.user)    
-  
+  const userState = useSelector((state: any) => state.user);
+
   return userState.isLogin ? <Outlet /> : <Navigate to="/auth" />;
 };
 

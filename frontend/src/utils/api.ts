@@ -5,7 +5,7 @@ const ADDRESS_API_KEY = process.env.REACT_APP_ADDRESS_API_KEY;
 const BASE_SERVER_URL = `http://localhost:${process.env.REACT_APP_BACKEND_PORT}`;
 
 const AuthHeader = {
-  headers: { Authrization: `Bearer ${getTokenInLocalStorage()}` },
+  headers: { Authorization: `Bearer ${getTokenInLocalStorage()}` },
 };
 
 export const getAddress = async (keyword: string, index: number = 1) => {

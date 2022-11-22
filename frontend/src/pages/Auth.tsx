@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "../components/auth/login";
 import SignUp from "../components/auth/signup";
 import Layout from "../components/common/Layout";
-import { cls } from "../utils/utils";
+import { cls, removeTokenInLocalStorage } from "../utils/utils";
+import { useDispatch } from "react-redux";
+import { resetUserAction } from "../redux/actions/userAction";
 
 const Auth = () => {
   const [authType, setAuthType] = useState("login");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(resetUserAction());
+  }, []);
+
   return (
     <Layout isNav={true}>
       {authType === "login" ? <Login /> : <SignUp />}
