@@ -42,7 +42,6 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  console.log(req.cookies)
   if (req.body) {
     const { email, password } = req.body;
     const user: any = await User.findOne({ email });
@@ -65,36 +64,42 @@ export const login = async (req: Request, res: Response) => {
     } catch (error) {
       res.status(500).json({ ok: false, message: "token create failed." });
     }
-    
-    res.cookie('hot-places-user', token, { httpOnly: true, sameSite: "none", secure: true });
+
+    res.cookie("hot-places-user", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
     return res.json({ ok: true, token, user });
   }
 };
 
-export const tokenCheck = async (req: Request, res: Response) => {  
-  const auth = req.headers.authrization
-  if(auth && typeof auth === "string"){
-    const token = auth.split(" ")[1]
-    const decodedToken = jwt.verify(token, process.env.PRIVATE_KEY)
-    if(decodedToken){
-      console.log("decoded Token",decodedToken)
-      res.json({ isLogin: true })
+export const tokenCheck = async (req: Request, res: Response) => {
+  const auth = req.headers.authrization;
+  if (auth && typeof auth === "string") {
+    const token = auth.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.PRIVATE_KEY);
+    if (decodedToken) {
+      console.log("decoded Token", decodedToken);
+      res.json({ isLogin: true });
     }
   } else {
-    res.json({ isLogin: false, message: "jwt token not found."})
+    res.json({ isLogin: false, message: "jwt token not found." });
   }
-}
+};
 
-export const myProfile = async (req: Request, res: Response) => {  
-  const auth = req.headers.authrization
-  if(auth && typeof auth === "string"){
-    const token = auth.split(" ")[1]
-    const { userId } = jwt.verify(token, process.env.PRIVATE_KEY) as JwtPayload
-    if(userId){
-      const user = await User.findOne({_id: userId})
-      res.json({user})
+export const me = async (req: Request, res: Response) => {
+  const authText = req.headers.authorization;
+  const token = authText?.split(" ")[1];
+  if (token && token !== "null") {
+    const { userId } = jwt.verify(token, process.env.PRIVATE_KEY) as JwtPayload;
+    const user = await User.findOne({ _id: userId });
+    if (user) {
+      return res.json({ ok: true, user });
+    } else {
+      res.json({ ok: false, message: "not found user." });
     }
   } else {
-    res.json({ isLogin: false, message: "jwt token not found."})
+    res.json({ ok: false, message: "jwt token not found." });
   }
-}
+};

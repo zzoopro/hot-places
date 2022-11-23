@@ -23,14 +23,22 @@ export const getPlace = async (req: Request, res: Response) => {
 
 export const uploadPlace = async (req: Request, res: Response) => {
   if (req.body) {
-    const { title, description, address } = req.body;
-    const newPlace = new Place({ title, description, address });
+    const { title, description, address, photo = null } = req.body;
 
-    if (newPlace) {
-      await newPlace.save();
-      return res.json({ ok: true });
-    } else {
-      console.log("cant created");
-    }
+    console.log("file", req.file);
+    console.log("photo", photo);
+
+    const newPlace = new Place({
+      title,
+      description,
+      address,
+    });
+
+    // if (newPlace) {
+    //   await newPlace.save();
+    //   return res.json({ ok: true });
+    // } else {
+    //   console.log("cant created");
+    // }
   }
 };

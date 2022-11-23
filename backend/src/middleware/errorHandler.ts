@@ -7,7 +7,6 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (res.headersSent) {
-    console.log("res.headersSent", res.headersSent);
     return next(err);
   }
   res.status((err as any).code).json({ ok: false, error: err.message });
